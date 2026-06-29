@@ -1,0 +1,30 @@
+
+.App {
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: linear-gradient(135deg, #f4f7ff 0%, #eef5ff 100%);
+  color: #1f2937;
+}
+
+.App h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #1d4ed8;
+}
+/* @media (max-width: 320px) {
+  .App {
+    width: fit-content;
+    scrollbar-width: none;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f4f7ff 0%, #eef5ff 100%);
+  }
+
+  .App h1 {
+    font-size: 1.5rem;
+  }
+} */
