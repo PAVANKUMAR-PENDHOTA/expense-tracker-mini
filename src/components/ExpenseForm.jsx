@@ -31,6 +31,10 @@ const ExpenseForm = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(expenses));
   }, [expenses]);
 
+  // handleSubmit: add a new expense or update an existing one when editingId is set.
+  // - Validates trimmed name, date, type and positive numeric amount.
+  // - If `editingId` is present, replaces the matching expense object.
+  // - Otherwise, prepends a new expense object with a unique `id`.
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -66,6 +70,8 @@ const ExpenseForm = () => {
     setFormData(initialFormData);
   };
 
+  // handleDelete: remove an expense by `id` and clear edit state if needed.
+  // Note: the UI Delete button now asks the user to confirm before calling this.
   const handleDelete = (id) => {
     setExpenses((prevExpenses) => prevExpenses.filter((expense) => expense.id !== id));
     if (editingId === id) {
@@ -74,6 +80,8 @@ const ExpenseForm = () => {
     }
   };
 
+  // handleEdit: populate the form with the selected expense and set `editingId`.
+  // This puts the form into "edit mode" so submitting will update instead of create.
   const handleEdit = (expense) => {
     setEditingId(expense.id);
     setFormData({
@@ -84,6 +92,7 @@ const ExpenseForm = () => {
     });
   };
 
+  // filteredExpenses: apply searchTerm to eventName and expenseType (case-insensitive)
   const filteredExpenses = expenses.filter((expense) => {
     const term = searchTerm.trim().toLowerCase();
     if (!term) return true;
@@ -161,8 +170,9 @@ const ExpenseForm = () => {
 
         <div className="expense-list">
           {filteredExpenses.length > 0 ? (
-            filteredExpenses.map((expense) => (
-              <div key={expense.id} className="expense-item">
+              // {/* Expense list: maps `filteredExpenses` to UI cards with formatted date/amount and actions. */}
+              filteredExpenses.map((expense) => (
+                <div key={expense.id} className="expense-item">
                 <div>
                   <h3>{expense.eventName}</h3>
                   <p>{new Date(expense.eventDate).toLocaleDateString()}</p>
@@ -170,10 +180,20 @@ const ExpenseForm = () => {
                 </div>
                 <div className="expense-actions">
                   <strong>Rs.{expense.totalAmount.toFixed(2)}</strong>
-                  <button type="button" onClick={() => handleEdit(expense)}>
+                  <button
+                    type="button"
+                    onClick={() => handleEdit(expense)}
+                    aria-label={`Edit ${expense.eventName}`}
+                  >
                     Edit
                   </button>
-                  <button type="button" onClick={() => handleDelete(expense.id)}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (window.confirm('Delete this expense?')) handleDelete(expense.id);
+                    }}
+                    aria-label={`Delete ${expense.eventName}`}
+                  >
                     Delete
                   </button>
                 </div>
